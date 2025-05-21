@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:note_proviante/core/di/i_di_scope.dart';
+import 'package:note_proviante/core/storage/i_local_storage.dart';
 import 'package:note_proviante/feature/themes/app_theme.dart';
-import 'package:provider/provider.dart';
 
 class ThemeSwitcher with ChangeNotifier {
   static ThemeSwitcher? _singleton;
   static ThemeSwitcher get instance => _singleton!;
-  ThemeSwitcher._internal();
+  final ILocalStorage _localStorage;
 
-  factory ThemeSwitcher() {
-    _singleton ??= ThemeSwitcher._internal();
+  ThemeSwitcher._internal({required ILocalStorage localStorage})
+    : _localStorage = localStorage;
+
+  factory ThemeSwitcher({required ILocalStorage localStorage}) {
+    _singleton ??= ThemeSwitcher._internal(localStorage: localStorage);
     return instance;
   }
 
@@ -20,10 +22,6 @@ class ThemeSwitcher with ChangeNotifier {
   }
 
   void switchTheme(BuildContext context) {
-    context
-        .read<IDiScope>()
-        .storage
-        .saveTheme(isDark = !isDark)
-        .then((_) => notifyListeners());
+    _localStorage.saveTheme(isDark = !isDark).then((_) => notifyListeners());
   }
 }

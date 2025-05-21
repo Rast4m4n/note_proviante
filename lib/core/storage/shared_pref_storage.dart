@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:note_proviante/core/storage/I_local_storage.dart';
+import 'package:note_proviante/core/storage/i_local_storage.dart';
 import 'package:note_proviante/domain/note_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,16 +49,19 @@ class SharedPrefStorage implements ILocalStorage {
     try {
       final notes = _pref.getString(_StorageKeys.notes);
       if (notes == null || notes.isEmpty) return [];
-      return jsonDecode(notes).map((e) => NoteModel.fromMap(e)).toList();
+      final notesList = jsonDecode(notes) as List<dynamic>;
+      return notesList
+          .map((e) => NoteModel.fromMap(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Ошибка загрузки данных с хранилища: $e');
     }
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     final notes = await get();
-    notes.removeWhere((note) => note.id == id.toString());
+    notes.removeWhere((note) => note.id == id);
     final notesJson = notes.map((e) => e.toMap()).toList();
     _setString(
       _StorageKeys.notes,

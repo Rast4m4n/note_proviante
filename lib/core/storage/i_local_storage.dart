@@ -4,7 +4,7 @@ abstract class ILocalStorage {
   Future<void> init();
   Future<void> write(NoteModel note);
   Future<List<NoteModel>> get();
-  Future<void> delete(int id);
+  Future<void> delete(String id);
   Future<void> saveTheme(bool isDark);
   Future<bool> getTheme();
 }
