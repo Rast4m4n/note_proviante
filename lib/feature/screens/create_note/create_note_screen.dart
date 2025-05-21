@@ -48,18 +48,22 @@ class TextFieldContents extends StatelessWidget {
       child: Column(
         spacing: 8,
         children: [
-          TextField(
-            controller: vm.titleController,
-            decoration: InputDecoration(
-              hintText: 'Заголовок',
-              border: OutlineInputBorder(),
+          Form(
+            key: vm.formKey,
+            child: TextFormField(
+              validator: vm.validateTitle,
+              controller: vm.titleController,
+              decoration: InputDecoration(
+                hintText: 'Заголовок',
+                border: OutlineInputBorder(),
+              ),
             ),
           ),
           TextField(
             controller: vm.contentController,
             maxLines: 10,
             decoration: InputDecoration(
-              hintText: 'Контент',
+              hintText: 'Текст заметки',
               border: OutlineInputBorder(),
             ),
           ),

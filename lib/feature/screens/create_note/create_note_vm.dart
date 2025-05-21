@@ -12,7 +12,22 @@ class CreateNoteVm {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
+  final formKey = GlobalKey<FormState>();
+  String? errorText;
+
+  bool isValidForm() {
+    return formKey.currentState!.validate();
+  }
+
+  String? validateTitle(String? value) {
+    if (value == null || value.isEmpty) {
+      return errorText = 'Заголовок не может быть пустым';
+    }
+    return null;
+  }
+
   Future<void> saveNote(BuildContext context) async {
+    if (!isValidForm()) return;
     final title = titleController.text;
     final content = contentController.text;
     await _noteRepository.saveNote(
