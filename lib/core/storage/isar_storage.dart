@@ -31,4 +31,10 @@ class IsarStorage implements ILocalStorage {
 
   @override
   Future<void> saveTheme(bool isDark) async {}
+
+  @override
+  Future<void> edit(NoteModel note) {
+    // TODO: implement edit
+    throw UnimplementedError();
+  }
 }

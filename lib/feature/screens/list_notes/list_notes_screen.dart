@@ -90,6 +90,16 @@ class ListNotesWidget extends StatelessWidget {
                   child: ListTile(
                     title: Text(notes?[index].title ?? ''),
                     subtitle: Text(notes?[index].content ?? ''),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  CreateNoteScreen(note: notes?[index]),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

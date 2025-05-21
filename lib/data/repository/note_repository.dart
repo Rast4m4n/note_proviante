@@ -5,6 +5,7 @@ abstract class INoteRepository {
   Future<List<NoteModel>> getNotes();
   Future<void> saveNote(NoteModel note);
   Future<void> deleteNote(String id);
+  Future<void> editNote(NoteModel note);
 }
 
 class NoteRepository implements INoteRepository {
@@ -27,5 +28,10 @@ class NoteRepository implements INoteRepository {
   @override
   Future<void> deleteNote(String id) async {
     await _localStorage.delete(id);
+  }
+
+  @override
+  Future<void> editNote(NoteModel note) async {
+    await _localStorage.edit(note);
   }
 }

@@ -5,8 +5,11 @@ import 'package:note_proviante/feature/screens/list_notes/list_notes_screen.dart
 import 'package:uuid/uuid.dart';
 
 class CreateNoteVm {
-  CreateNoteVm({required INoteRepository noteRepository})
-    : _noteRepository = noteRepository;
+  CreateNoteVm({required INoteRepository noteRepository, NoteModel? note})
+    : _noteRepository = noteRepository,
+      _note = note;
+
+  final NoteModel? _note;
 
   final INoteRepository _noteRepository;
   final TextEditingController titleController = TextEditingController();
@@ -26,10 +29,16 @@ class CreateNoteVm {
     return null;
   }
 
-  Future<void> saveNote(BuildContext context) async {
+  Future<void> saveAndBackToListNote(BuildContext context) async {
     if (!isValidForm()) return;
     final title = titleController.text;
     final content = contentController.text;
+    if (_note != null) await _editExistingNote(title, content);
+    if (_note == null) await _saveNote(title, content);
+    if (context.mounted) navigateToNotes(context);
+  }
+
+  Future<void> _saveNote(String title, String content) async {
     await _noteRepository.saveNote(
       NoteModel(
         id: Uuid().v4(),
@@ -38,13 +47,24 @@ class CreateNoteVm {
         createdAt: DateTime.now(),
       ),
     );
-    if (context.mounted) navigateToNotes(context);
+  }
+
+  Future<void> _editExistingNote(String title, String content) async {
+    await _noteRepository.editNote(
+      NoteModel(
+        id: _note!.id,
+        title: title,
+        content: content,
+        createdAt: DateTime.now(),
+      ),
+    );
   }
 
   void navigateToNotes(BuildContext context) {
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const ListNotesScreen()),
+      (route) => false,
     );
   }
 }

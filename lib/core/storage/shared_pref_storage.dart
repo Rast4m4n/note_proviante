@@ -45,6 +45,24 @@ class SharedPrefStorage implements ILocalStorage {
   }
 
   @override
+  Future<void> edit(NoteModel note) async {
+    final notes = await get();
+    final index = notes.indexWhere((e) => e.id == note.id);
+    if (index != -1) {
+      notes[index] = notes[index].copyWith(
+        title: note.title,
+        content: note.content,
+      );
+    }
+    final notesJson = notes.map((e) => e.toMap()).toList();
+    _setString(
+      _StorageKeys.notes,
+      jsonEncode(notesJson),
+      'Ошибка редактирования данных в хранилище',
+    );
+  }
+
+  @override
   Future<List<NoteModel>> get() async {
     try {
       final notes = _pref.getString(_StorageKeys.notes);

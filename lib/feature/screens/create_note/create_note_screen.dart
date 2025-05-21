@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:note_proviante/core/di/i_di_scope.dart';
+import 'package:note_proviante/domain/note_model.dart';
 import 'package:note_proviante/feature/screens/create_note/create_note_vm.dart';
 import 'package:provider/provider.dart';
 
 class CreateNoteScreen extends StatefulWidget {
-  const CreateNoteScreen({super.key});
+  const CreateNoteScreen({super.key, this.note});
+  final NoteModel? note;
 
   @override
   State<CreateNoteScreen> createState() => _CreateNoteScreenState();
@@ -15,7 +17,14 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
   @override
   void initState() {
     super.initState();
-    vm = CreateNoteVm(noteRepository: context.read<IDiScope>().noteRepository);
+    vm = CreateNoteVm(
+      noteRepository: context.read<IDiScope>().noteRepository,
+      note: widget.note,
+    );
+    if (widget.note != null) {
+      vm.titleController.text = widget.note!.title;
+      vm.contentController.text = widget.note!.content;
+    }
   }
 
   @override
@@ -31,7 +40,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
       appBar: AppBar(title: const Text('Создание заметки')),
       body: TextFieldContents(vm: vm),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => vm.saveNote(context),
+        onPressed: () => vm.saveAndBackToListNote(context),
         child: const Icon(Icons.save),
       ),
     );
