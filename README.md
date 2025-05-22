@@ -32,11 +32,16 @@
 - **JSON Serializable** - для сериализации/десериализации данных
 
 ## Скриншоты приложения
+### Главный экран
 ![Главный экран](assets/screenshots/mainScreen.png)
-![Главный экран](assets/screenshots/createNote.png)
-![Главный экран](assets/screenshots/deleteNote.png)
-![Главный экран](assets/screenshots/switchTheme.png)
-![Главный экран](assets/screenshots/validate.png)
+### Создание заметки
+![Создание заметки](assets/screenshots/createNote.png)
+### Удаление заметки
+![Удаление заметки](assets/screenshots/deleteNote.png)
+### Смена темы
+![Смена темы](assets/screenshots/switchTheme.png)
+### Валидация
+![Валидация](assets/screenshots/validate.png)
 
 
 
