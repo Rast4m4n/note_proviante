@@ -1,10 +1,18 @@
 import 'package:note_proviante/core/storage/i_local_storage.dart';
 import 'package:note_proviante/domain/note_model.dart';
 
+/// Интерфейс для работы с заметками
 abstract class INoteRepository {
+  /// Получение заметок
   Future<List<NoteModel>> getNotes();
+
+  /// Сохранение заметки
   Future<void> saveNote(NoteModel note);
+
+  /// Удаление заметки
   Future<void> deleteNote(String id);
+
+  /// Изменение заметки
   Future<void> editNote(NoteModel note);
 }
 

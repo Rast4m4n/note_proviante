@@ -24,6 +24,7 @@ class SharedPrefStorage implements ILocalStorage {
     return _instance;
   }
 
+  /// Запись данных в хранилище c обработкой ошибок
   Future<void> _setString(String key, String value, String errorMessage) async {
     try {
       await _pref.setString(key, value);
@@ -32,6 +33,7 @@ class SharedPrefStorage implements ILocalStorage {
     }
   }
 
+  /// Запись заметки в хранилище
   @override
   Future<void> write(NoteModel note) async {
     final notes = await get();
@@ -44,6 +46,7 @@ class SharedPrefStorage implements ILocalStorage {
     );
   }
 
+  /// Изменение заметки в хранилище
   @override
   Future<void> edit(NoteModel note) async {
     final notes = await get();
@@ -62,6 +65,7 @@ class SharedPrefStorage implements ILocalStorage {
     );
   }
 
+  /// Получение заметок из хранилища
   @override
   Future<List<NoteModel>> get() async {
     try {
@@ -76,6 +80,7 @@ class SharedPrefStorage implements ILocalStorage {
     }
   }
 
+  /// Удаление заметки из хранилища
   @override
   Future<void> delete(String id) async {
     final notes = await get();
@@ -88,11 +93,13 @@ class SharedPrefStorage implements ILocalStorage {
     );
   }
 
+  /// Сохранение темы
   @override
   Future<void> saveTheme(bool isDark) async {
     await _pref.setBool(_StorageKeys.theme, isDark);
   }
 
+  /// Получение темы
   @override
   Future<bool> getTheme() async {
     final isDark = _pref.getBool(_StorageKeys.theme) ?? false;

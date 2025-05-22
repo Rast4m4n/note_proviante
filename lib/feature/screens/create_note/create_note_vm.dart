@@ -18,10 +18,12 @@ class CreateNoteVm {
   final formKey = GlobalKey<FormState>();
   String? errorText;
 
+  /// Проверка на валидность формы
   bool isValidForm() {
     return formKey.currentState!.validate();
   }
 
+  /// Проверка на валидность заголовка
   String? validateTitle(String? value) {
     if (value == null || value.isEmpty) {
       return errorText = 'Заголовок не может быть пустым';
@@ -29,6 +31,7 @@ class CreateNoteVm {
     return null;
   }
 
+  /// Сохранение заметки и возвращение на экран списка заметок
   Future<void> saveAndBackToListNote(BuildContext context) async {
     if (!isValidForm()) return;
     final title = titleController.text;
@@ -38,6 +41,7 @@ class CreateNoteVm {
     if (context.mounted) navigateToNotes(context);
   }
 
+  /// Создание новой заметки
   Future<void> _saveNote(String title, String content) async {
     await _noteRepository.saveNote(
       NoteModel(
@@ -49,6 +53,7 @@ class CreateNoteVm {
     );
   }
 
+  /// Изменение существующей заметки
   Future<void> _editExistingNote(String title, String content) async {
     await _noteRepository.editNote(
       NoteModel(

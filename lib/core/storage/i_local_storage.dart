@@ -1,5 +1,6 @@
 import 'package:note_proviante/domain/note_model.dart';
 
+/// Интерфейс для работы с локальным хранилищем
 abstract class ILocalStorage {
   Future<void> init();
   Future<void> write(NoteModel note);

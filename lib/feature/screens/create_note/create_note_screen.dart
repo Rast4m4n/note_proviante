@@ -21,6 +21,7 @@ class _CreateNoteScreenState extends State<CreateNoteScreen> {
       noteRepository: context.read<IDiScope>().noteRepository,
       note: widget.note,
     );
+    // Если заметка существует, то заполняем поля заголовком и текстом
     if (widget.note != null) {
       vm.titleController.text = widget.note!.title;
       vm.contentController.text = widget.note!.content;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_proviante/core/di/i_di_scope.dart';
+import 'package:note_proviante/domain/note_model.dart';
 import 'package:note_proviante/feature/screens/create_note/create_note_screen.dart';
 import 'package:note_proviante/feature/screens/list_notes/list_notes_vm.dart';
 import 'package:note_proviante/feature/themes/theme_switcher.dart';
@@ -68,6 +69,9 @@ class ListNotesWidget extends StatelessWidget {
             child: Text('Ошибка загрузки заметок: ${snapshot.error}'),
           );
         }
+        if (snapshot.data == null || snapshot.data!.isEmpty) {
+          return const Center(child: Text('Заметок нет'));
+        }
         final notes = snapshot.data;
         return ListView.separated(
           itemCount: snapshot.data?.length ?? 0,
@@ -75,38 +79,62 @@ class ListNotesWidget extends StatelessWidget {
             return const SizedBox(height: 8);
           },
           itemBuilder: (context, index) {
+            final createdAt =
+                "${notes![index].createdAt.day.toString()}.${notes[index].createdAt.month.toString()}.${notes[index].createdAt.year.toString()}";
             return Dismissible(
-              key: ValueKey(notes?[index].id),
+              key: ValueKey(notes[index].id),
               onDismissed: (direction) {
-                context.read<ListNotesVm>().deleteNote(notes![index].id);
+                context.read<ListNotesVm>().deleteNote(notes[index].id);
               },
               background: ColoredBox(
                 color: Colors.red,
                 child: const Icon(Icons.delete),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Card(
-                  child: ListTile(
-                    title: Text(notes?[index].title ?? ''),
-                    subtitle: Text(notes?[index].content ?? ''),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  CreateNoteScreen(note: notes?[index]),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              child: _NoteWidget(
+                notes: notes,
+                createdAt: createdAt,
+                index: index,
               ),
             );
           },
         );
       },
+    );
+  }
+}
+
+class _NoteWidget extends StatelessWidget {
+  const _NoteWidget({
+    required this.notes,
+    required this.createdAt,
+    required this.index,
+  });
+
+  final List<NoteModel>? notes;
+  final String createdAt;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Card(
+        child: ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Text(notes![index].title), Text(createdAt)],
+          ),
+          subtitle: Text(notes![index].content),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateNoteScreen(note: notes![index]),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
